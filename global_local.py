@@ -1,60 +1,103 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import simpleaudio as sa
-# import expyriment as xp
-
 
 ######################
 ### DEFINE STIMULI ###
 ######################
 
-### SOUND A ###
+### CREATE SOUNDS 'A' AND 'B' ###
 
-# note frequencies
-A1_freq = 350
-A2_freq = 700
-A3_freq = 1400
+# Note frequencies
+freqs = [[350, 700, 1400], [500, 1000, 2000]]
+# Sampling rate
+sample_rate = 44100
+# Duration of sound
+duration_sound = 0.05
+# Time array
+t = np.linspace(0, duration_sound, int(duration_sound * sample_rate)) # ??? 2 arg for linspace is exclusive 
 
-# get timesteps for each sample
-SAMPLE_RATE = 44100
-DURATION_sound = 0.05
-t = np.linspace(start=0.0,
-                stop=DURATION_sound,
-                num=int(DURATION_sound * SAMPLE_RATE))
+# Generate sine wave notes
+notes_A = [np.sin(freq * t * 2 * np.pi) for freq in freqs[0]]
+notes_B = [np.sin(freq * t * 2 * np.pi) for freq in freqs[1]]
 
-# generate sine wave notes
-A1_note = np.sin(A1_freq * t * 2 * np.pi)
-A2_note = np.sin(A2_freq * t * 2 * np.pi)
-A3_note = np.sin(A3_freq * t * 2 * np.pi)
+# Mix audio together
+wave_A = np.sum(notes_A, axis = 0)
+wave_B = np.sum(notes_B, axis = 0)
 
-# mix audio together
-n = len(t)
-audio = np.zeros(n)
-offset = 0
-audio[0 + offset: n + offset] += A1_note
-audio[0 + offset: n + offset] += A2_note
-audio[0 + offset: n + offset] += A3_note
+# # Calculate the number of subplots needed
+# num_notes = len(notes)
 
-DURATION_break = 0.15
-silence = np.zeros(int(DURATION_break * SAMPLE_RATE))
+# fig, axs = plt.subplots(num_notes + 1, 1, figsize=(10, 5*(num_notes + 1)))
 
-audio2 = np.hstack((audio, silence, audio, silence, audio))
+# # Plot each note on a separate subplot
+# for ax, note in zip(axs, notes):
+#     ax.plot(note)
 
-plt.plot(audio2)
-plt.show()
+# # Plot the mixed wave on the last subplot
+# axs[-1].plot(wave)
+# plt.show()
 
+# Define the length of the rising, constant, and falling sections
+def trapezoidal_window(total_duration, rise_fall_duration = 0.007, sampling_rate = 44100):
+    if total_duration - 2*rise_fall_duration < 0:
+        raise ValueError("Rise and fall times are too long for the given length")
+    
+    n_sample_ramp = int(rise_fall_duration * sampling_rate)
+    n_sample_flat = int(total_duration * sampling_rate) - 2 * n_sample_ramp
+    return np.concatenate([
+        np.linspace(0, 1, n_sample_ramp, endpoint=False),
+        np.ones(n_sample_flat),
+        np.linspace(1, 0, n_sample_ramp, endpoint=False)
+    ])  
 
-# normalize to 16-bit range
-audio2 *= 32767 / np.max(np.abs(audio2))
-# convert to 16-bit data
-audio2 = audio2.astype(np.int16)
+# Create trapezoidal window
+window_trapezoidal = trapezoidal_window(duration_sound)
 
-# start playback
-play_obj = sa.play_buffer(audio2, 2, 2, SAMPLE_RATE)
+# # Plot the trapezoidal window
+# plt.plot(window_trapezoidal)
+# plt.title('Trapezoidal Window')
+# plt.show()
 
-# wait for playback to finish before exiting
+windowed_wave_A = wave_A * window_trapezoidal
+
+windowed_wave_A = np.append(windowed_wave_A, 0)
+print(len(windowed_wave_A))
+
+windowed_wave_B = wave_B * window_trapezoidal
+
+windowed_wave_B = np.append(windowed_wave_B, 0)
+print(len(windowed_wave_B))
+
+# # Plot the smoothed wave
+# fig, axs = plt.subplots(2)
+
+# # Plot windowed_wave_A
+# axs[0].plot(windowed_wave_A)
+# axs[0].set_title('Windowed Wave A')
+
+# # Plot windowed_wave_B
+# axs[1].plot(windowed_wave_B)
+# axs[1].set_title('Windowed Wave B')
+
+# # Display the plots
+# plt.tight_layout()
+# plt.show()
+
+# Convert the numpy array to 16-bit integers
+audio_wave_A = (windowed_wave_A * 32767).astype(np.int16)
+
+# Play the audio
+play_obj = sa.play_buffer(audio_wave_A, 2, 2, sample_rate)
+
+# Wait for playback to finish
 play_obj.wait_done()
 
+# Convert the numpy array to 16-bit integers
+audio_wave_B = (windowed_wave_B * 32767).astype(np.int16)
 
+# Play the audio
+play_obj = sa.play_buffer(audio_wave_B, 2, 2, sample_rate)
 
-
+# Wait for playback to finish
+play_obj.wait_done()
