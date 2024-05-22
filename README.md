@@ -1,4 +1,4 @@
-# PCBS project
+# global-local auditory experiment
 
 ## Overview
 
