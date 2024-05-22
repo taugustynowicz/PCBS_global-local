@@ -1,5 +1,6 @@
 import expyriment as xpy
 from expyriment.io import Keyboard
+from expyriment.stimuli import TextScreen
 import random
 
 # Import all the audio files
@@ -16,6 +17,27 @@ xpy.control.defaults.event_logging = 3
 
 # Create a Keyboard object
 kb = Keyboard()
+
+# Create the instructions
+INSTRUCTIONS = """
+During the next 30 min different sounds will be played by the headphones
+for successive periods of approximately 3 minutes.
+
+You do not need to pay attention to these sounds. 
+Please close your eyes, and let yourself mind-wander.
+"""
+
+# Present the instructions
+instructions = xpy.stimuli.TextScreen("Instructions",
+                                        heading_size=60,
+                                        text=INSTRUCTIONS
+                                                        )
+
+instructions.preload()
+instructions.present()
+
+# Wait for a keypress to continue
+kb.wait_char(' ')
 
 # Create a screen to display stimuli
 screen = xpy.stimuli.BlankScreen()
