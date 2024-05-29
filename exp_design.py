@@ -12,12 +12,6 @@ BBBBA = xpy.stimuli.Audio("BBBBA.wav")
 # Initialize Expyriment
 xpy.control.initialize()
 
-# Set the level of event logging
-xpy.control.defaults.event_logging = 3
-
-# Create a Keyboard object
-kb = Keyboard()
-
 # Create the instructions
 INSTRUCTIONS = """
 During the next 30 min different sounds will be played by the headphones
@@ -26,12 +20,18 @@ for successive periods of approximately 3 minutes.
 You do not need to pay attention to these sounds. 
 Please close your eyes, and let yourself mind-wander.
 """
+HEADING = """Instructions"""
+
+# Create a Keyboard object
+kb = Keyboard()
+
+# Create a fixation cross
+fixation_cross = xpy.stimuli.FixCross(size=(20, 20), line_width=4)
 
 # Present the instructions
-instructions = xpy.stimuli.TextScreen("Instructions",
-                                        heading_size=60,
-                                        text=INSTRUCTIONS
-                                                        )
+instructions = xpy.stimuli.TextScreen(heading = HEADING, heading_size=30,
+                                      text = INSTRUCTIONS, text_size = 30,
+                                      text_colour = (255, 255, 255))    
 
 instructions.preload()
 instructions.present()
@@ -41,9 +41,6 @@ kb.wait_char(' ')
 
 # Create a screen to display stimuli
 screen = xpy.stimuli.BlankScreen()
-
-# Create a fixation cross
-fixation_cross = xpy.stimuli.FixCross(size=(20, 20), line_width=4)
 
 # Function to display the fixation cross
 def display_fixation_cross():

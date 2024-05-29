@@ -29,19 +29,19 @@ notes_B = [np.sin(freq * t * 2 * np.pi) for freq in freqs[1]]
 wave_A = np.sum(notes_A, axis = 0)
 wave_B = np.sum(notes_B, axis = 0)
 
-# ### Inspect the waves at this point
+### Inspect the waves at this point
 
-# num_notes = len(notes_A)
+num_notes = len(notes_A)
 
-# fig, axs = plt.subplots(num_notes + 1, 1, figsize=(10, 5*(num_notes + 1)))
+fig, axs = plt.subplots(num_notes + 1, 1, figsize=(10, 5*(num_notes + 1)))
 
-# # Plot each note on a separate subplot
-# for ax, note in zip(axs, notes_A):
-#     ax.plot(note)
+# Plot each note on a separate subplot
+for ax, note in zip(axs, notes_A):
+    ax.plot(note)
 
-# # Plot the mixed wave on the last subplot
-# axs[-1].plot(wave_A)
-# plt.show()
+# Plot the mixed wave on the last subplot
+axs[-1].plot(wave_A)
+plt.show()
 
 ### Create the window
 
@@ -65,10 +65,10 @@ def cosine_window(total_duration, rise_fall_duration = 0.007, sampling_rate = 44
 # Create cosine window
 window_cosine = cosine_window(duration_sound)
 
-# # Plot the cosine window
-# plt.plot(window_cosine)
-# plt.title('Cosine Window')
-# plt.show()
+# Plot the cosine window
+plt.plot(window_cosine)
+plt.title('Cosine Window')
+plt.show()
 
 # Apply the window to the waves
 windowed_wave_A = wave_A * window_cosine
@@ -90,17 +90,17 @@ windowed_wave_B = windowed_wave_B / np.max(np.abs(windowed_wave_B)) * desired_am
 
 fig, axs = plt.subplots(2)
 
-# # Plot windowed_wave_A
-# axs[0].plot(windowed_wave_A)
-# axs[0].set_title('Windowed Wave A')
+# Plot windowed_wave_A
+axs[0].plot(windowed_wave_A)
+axs[0].set_title('Windowed Wave A')
 
-# # Plot windowed_wave_B
-# axs[1].plot(windowed_wave_B)
-# axs[1].set_title('Windowed Wave B')
+# Plot windowed_wave_B
+axs[1].plot(windowed_wave_B)
+axs[1].set_title('Windowed Wave B')
 
-# # Display the plots
-# plt.tight_layout()
-# plt.show()
+# Display the plots
+plt.tight_layout()
+plt.show()
 
 ### Create SOA
 
@@ -146,18 +146,18 @@ def write_array_as_sound(nparray, sample_rate, filename):
                            sample_rate,
                            nparray.T.astype(np.dtype('i2')))
     
-### Save the sounds to .wav files
+# ### Save the sounds to .wav files
 
-# AAAAA
-write_array_as_sound(AAAAA, sample_rate, 'AAAAA.wav')
+# # AAAAA
+# write_array_as_sound(AAAAA, sample_rate, 'AAAAA.wav')
 
-# BBBBB
-write_array_as_sound(BBBBB, sample_rate, 'BBBBB.wav')
+# # BBBBB
+# write_array_as_sound(BBBBB, sample_rate, 'BBBBB.wav')
 
-# AAAAB
-write_array_as_sound(AAAAB, sample_rate, 'AAAAB.wav')
+# # AAAAB
+# write_array_as_sound(AAAAB, sample_rate, 'AAAAB.wav')
 
-# BBBBA
-write_array_as_sound(BBBBA, sample_rate, 'BBBBA.wav')
+# # BBBBA
+# write_array_as_sound(BBBBA, sample_rate, 'BBBBA.wav')
 
 
