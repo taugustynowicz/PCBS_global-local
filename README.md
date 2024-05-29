@@ -1,4 +1,4 @@
-# global-local auditory experiment
+# Investigating the processing of auditory regularities.
 
 ## Overview
 
