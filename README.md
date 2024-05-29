@@ -6,4 +6,4 @@ Reproduction of the experimental procedure of the global-local paradigm, origina
 
 ## Quick guidelines
 
-As you can see, there are two .py files. Make sure to run create_stimuli.py first, in order to save the stimuli locally on your PC. They are essential to running the exp_design.py file, that is the actual experiment. Also, make sure to store the stimuli and the exp_design.py code in one folder!
+As you can see, there are two .py files. The create_stimuli.py creates all four .wav files. These are essential to running the exp_design.py file, that is the actual experiment.
